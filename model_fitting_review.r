@@ -59,7 +59,7 @@ ksvm.mod.class = ksvm(as.matrix(text.m.train[,-rating.col]), as.factor(unlist(te
 ksvm.mod.pred.class = predict(ksvm.mod.class, as.matrix(text.m.test[,-rating.col]))
 ksvm.mse.class = mean(((as.numeric(as.character(ksvm.mod.pred.class)) - actual.rating)^2))
 
-# Support vector machine regression
+# Run kernel Support vector machine regression
 library(kernlab)
 ksvm.mod.reg = ksvm(as.matrix(text.m.train[,-rating.col]), as.character(text.m.train[,rating.col]), type = "eps-svr", kernel = "rbfdot", C = 1)
 ksvm.mod.pred.reg = predict(ksvm.mod.reg, as.matrix(text.m.test[,-rating.col]))
