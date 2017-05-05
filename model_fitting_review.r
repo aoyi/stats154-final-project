@@ -42,7 +42,18 @@ boost.mod = gbm(rating ~ ., data = data.frame(text.m.train), distribution = "gau
 boost.mod.pred = predict(boost.mod, newdata = data.frame(text.m.test[,-rating.col]), type = "response", n.trees = 500)
 boost.mse = mean((boost.mod.pred - actual.rating)^2)
 
-# Run support vector machine
+# Run SVM
+library(e1071)
+svm.model.class = svm(as.matrix(text.m.train[,-rating.col]), as.factor(unlist(text.m.train[,rating.col])), cost = 1, gamma = 1,type = "C-classification")
+svm.pred.class  = predict(svm.model.class, as.matrix(text.m.test[,-rating.col]))
+svm.mse.class = mean(((as.numeric(as.character(svm.pred.class)) - actual.rating)^2))
+
+# Run SVM Reg
+svm.model.reg = svm(as.matrix(text.m.train[,-rating.col]), as.matrix(text.m.train[,rating.col]), cost = 1, gamma = 1,type = "nu-regression")
+svm.pred.reg  = predict(svm.model.reg, as.matrix(text.m.test[,-rating.col]))
+svm.mse.class = mean(((as.numeric(as.character(svm.pred.reg)) - actual.rating)^2))
+
+# Run kernel support vector machine
 library(kernlab)
 ksvm.mod.class = ksvm(as.matrix(text.m.train[,-rating.col]), as.factor(unlist(text.m.train[,rating.col])), type = "C-svc", kernel = "rbfdot", C = 1)
 ksvm.mod.pred.class = predict(ksvm.mod.class, as.matrix(text.m.test[,-rating.col]))
